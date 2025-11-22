@@ -1,0 +1,41 @@
+from django.db import models
+
+class machining(models.Model):
+    batch_number = models.CharField(max_length=50)
+    date = models.DateField()
+    shift = models.CharField(max_length=100)
+    component = models.CharField(max_length=100)
+    machine_no = models.CharField(max_length=100)
+    mc_type = models.CharField(max_length=100)
+    operator = models.CharField(max_length=100)
+    inspector = models.CharField(max_length=100)
+    setup =  models.CharField(max_length=100)
+    target = models.IntegerField()
+    production = models.IntegerField()
+    remark =  models.CharField(max_length=100)
+    cnc_height = models.IntegerField()
+    cnc_od = models.IntegerField()
+    cnc_bore = models.IntegerField()
+    cnc_groove = models.IntegerField()
+    cnc_dent = models.IntegerField()
+    forging_height = models.IntegerField()
+    forging_od = models.IntegerField()
+    forging_bore = models.IntegerField()
+    forging_crack = models.IntegerField() 
+    forging_dent = models.IntegerField()
+    pre_mc_height = models.IntegerField()
+    pre_mc_od = models.IntegerField()
+    pre_mc_bore = models.IntegerField()
+    rework_height = models.IntegerField()
+    rework_od = models.IntegerField()
+    rework_bore = models.IntegerField()
+    rework_groove = models.IntegerField()
+    rework_dent = models.IntegerField()
+    verified_by = models.CharField(max_length=100, blank=True)  # Allow it to be blank
+    heat_no = models.CharField(max_length=100)
+    target1 = models.IntegerField()
+    total_produced = models.IntegerField()
+    remaining = models.IntegerField(default=0)
+    def __str__(self):
+        return self.component
+    
