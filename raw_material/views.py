@@ -69,6 +69,8 @@ class MasterDropdownView(APIView):
             data = TypeOfMaterialSerializer(TypeOfMaterial.objects.all(), many=True).data
         elif master_type == "LOCATION":
             data = LocationSerializer(Location.objects.all(), many=True).data
+        elif master_type == "FORGING_LINE":
+            data = LocationSerializer(Location.objects.all(), many=True).data
         else:
             return Response({"error": "Invalid type"}, status=400)
 
@@ -2454,4 +2456,58 @@ class MasterlistCreateAPIView(generics.CreateAPIView):
             headers=headers
         )
 
+from .models import SPCDimension, SPCRecord
+from rest_framework import status
+
+class ComponentSPCDetailView(APIView):
+    def get(self, request, component):
+        dimensions = SPCDimension.objects.filter(component=component).prefetch_related('records')
+        response_data = []
+
+        for dim in dimensions:
+            spc_records = list(dim.records.all())  # FK reverse accessor
+
+            latest_record = spc_records[0] if spc_records else None
+            previous_records = spc_records[1:] if len(spc_records) > 1 else []
+
+            response_data.append({
+                'dimension': dim.dimension,
+                'name': dim.name,
+                'type': dim.type,
+                'instrument': dim.instrument,
+                'remark': dim.remark,
+                'spc_time_period_days': dim.spc_time_period_days,
+                'latest_record': {
+                    'cp_value': latest_record.cp_value,
+                    'cpk_value': latest_record.cpk_value,
+                    'uploaded_at': latest_record.uploaded_at,
+                    'uploaded_by': latest_record.uploaded_by,
+                    'spc_file': latest_record.spc_file.url,
+                } if latest_record else None,
+                'previous_records': [
+                    {
+                        'cp_value': record.cp_value,
+                        'cpk_value': record.cpk_value,
+                        'uploaded_at': record.uploaded_at,
+                        'uploaded_by': record.uploaded_by,
+                        'spc_file': record.spc_file.url,
+                    }
+                    for record in previous_records
+                ]
+            })
+
+        return Response(response_data, status=status.HTTP_200_OK)
+    
+from .serializers import SPCDimensionSerializer
+
+class BulkSPCDimensionCreateAPIView(APIView):
+    def post(self, request):
+        # Simply use the data as sent from the frontend
+        dimensions_data = request.data.get('dimensions', [])
+        
+        serializer = SPCDimensionSerializer(data=dimensions_data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

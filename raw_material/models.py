@@ -321,6 +321,32 @@ class MasterlistDocument(models.Model):
     def __str__(self):
         return f"{self.masterlist} - {self.document_type} (v{self.version})"
     
+class SPCDimension(models.Model):
+    component = models.CharField(max_length=250)
+    dimension = models.CharField(max_length=250)
+    name = models.CharField(max_length=100)
+    type = models.CharField(max_length=100)
+    instrument = models.CharField(max_length=100)
+    remark = models.CharField(max_length=250, blank=True, null=True)
+    spc_time_period_days = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.CharField(max_length=150, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.component} - {self.name}"
+
+
+class SPCRecord(models.Model):
+    dimension = models.ForeignKey(SPCDimension, on_delete=models.CASCADE, related_name="records")  # ← FK now
+    cp_value = models.DecimalField(max_digits=10, decimal_places=5, blank=True, null=True)
+    cpk_value = models.DecimalField(max_digits=10, decimal_places=5, blank=True, null=True)
+    spc_file = models.FileField(upload_to='spc_records/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploaded_by = models.CharField(max_length=150, blank=True, null=True)
+
+    class Meta:
+        ordering = ['-uploaded_at']
+    
 from django.utils.timezone import now
 
 def generate_tag_uid():

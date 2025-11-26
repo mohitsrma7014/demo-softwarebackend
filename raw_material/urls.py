@@ -58,6 +58,10 @@ urlpatterns = [
     path('masterlistn/<int:masterlist_pk>/documents/<int:doc_pk>/set-current/', document_set_current, name='document-set-current'),
     path('api/masterlist/missing_documents_report/', missing_documents_report, name='missing_documents_report'),
     path('api/masterlist/create/', MasterlistCreateAPIView.as_view(), name='masterlist-create'),
+    path('spc/component/<str:component>/', ComponentSPCDetailView.as_view(), name='component-spc-detail'),
+    path('spc-dimensions/bulk-create/', BulkSPCDimensionCreateAPIView.as_view(), name='bulk-spc-dimension-create'),
+
+
 
 
 

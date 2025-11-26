@@ -188,7 +188,7 @@ class MasterlistSerializer1(serializers.ModelSerializer):
         fields = [
             'id', 'component', 'part_name', 'customer', 'drawing_sr_number',
              'grade', 'slug_weight', 'dia', 'ht_process',
-            'ring_weight', 'cost', 'op_10_time',
+            'ring_weight', 'cost', 'op_10_time','supplier',
             'op_10_target', 'op_20_time', 'op_20_target', 'cnc_target_remark',
             'created_at', 'documents','verified_by','packing_condition','running_status',
             'hardness_required','drawing_rev_date','drawing_rev_number','customer_location','forging_line'
@@ -201,7 +201,7 @@ class MasterlistCreateUpdateSerializer(serializers.ModelSerializer):
         fields = [
             'component', 'part_name', 'customer', 'drawing_sr_number',
             'grade', 'slug_weight', 'dia', 'ht_process',
-            'ring_weight', 'cost',  'op_10_time',
+            'ring_weight', 'cost',  'op_10_time','supplier',
             'op_10_target', 'op_20_time', 'op_20_target', 'cnc_target_remark','verified_by','packing_condition','running_status',
             'hardness_required','drawing_rev_date','drawing_rev_number','customer_location','forging_line'
         ]
@@ -229,4 +229,12 @@ class MasterListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Masterlist
+        fields = '__all__'
+
+from .models import SPCDimension
+
+
+class SPCDimensionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SPCDimension
         fields = '__all__'
