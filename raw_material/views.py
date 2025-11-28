@@ -2177,7 +2177,7 @@ def production_data_api(request):
                 'reason_for_downtime': item.reason_for_downtime,
                 'reason_for_low_production': item.reason_for_low_production,
 
-                'location': master_data['customer_location'] if master_data else None,
+                'location': master_data['location'] if master_data else None,
                 'cost': master_data['cost'] if master_data else None
             })
     except Exception as e:
