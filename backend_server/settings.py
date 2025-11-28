@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'core',
     'raw_material',
     'simple_history',
-    'forging','heat_treatment','pre_mc','machining','marking','visual','fi','dispatch','ims_documents'
+    'forging','heat_treatment','pre_mc','machining','marking','visual','fi','dispatch','ims_documents','packing_area_inventory'
 ]
 
 MIDDLEWARE = [
