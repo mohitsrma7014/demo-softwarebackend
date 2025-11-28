@@ -21,7 +21,8 @@ urlpatterns = [
     path('api/marking/', include('marking.urls')),
     path('api/visual/', include('visual.urls')),
     path('api/dispatch/', include('dispatch.urls')),
-    path('api/packing_area_inventory/', include('packing_area_inventory.urls'))
+    path('api/packing_area_inventory/', include('packing_area_inventory.urls')),
+    path('api/ims_documents/', include('ims_documents.urls'))
 
 ]
 from django.conf import settings
