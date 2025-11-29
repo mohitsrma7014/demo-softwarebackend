@@ -14,7 +14,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='holdmaterial',
             name='rm_receiving',
-            field=models.ForeignKey(default=0, on_delete=django.db.models.deletion.CASCADE, related_name='holds', to='raw_material.rmreceiving'),
-            preserve_default=False,
+            field=models.ForeignKey(
+                null=True,
+                blank=True,
+                default=None,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='holds',
+                to='raw_material.rmreceiving'
+            ),
         ),
     ]

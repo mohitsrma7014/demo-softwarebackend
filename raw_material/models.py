@@ -56,8 +56,8 @@ class RMReceiving(models.Model):
     standerd = models.CharField(max_length=100)
     heatno = models.CharField(max_length=50)
     reciving_weight_kg = models.DecimalField(max_digits=10, decimal_places=2)   # total received kg
-    hold_weight_kg = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # remaining kg available
-    remaining = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    hold_weight_kg = models.DecimalField(max_digits=10, decimal_places=2, default=None)  # remaining kg available
+    remaining = models.DecimalField(max_digits=10, decimal_places=2,default=None)
     rack_no = models.CharField(max_length=50)
     location = models.CharField(max_length=100)
     type_of_material = models.CharField(max_length=100)
@@ -139,8 +139,8 @@ class HoldMaterial(models.Model):
         ('complete','Complete Issue')
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open')
-    remaining = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    issue_qty_kg = models.DecimalField(max_digits=10, decimal_places=2, default=0) 
+    remaining = models.DecimalField(max_digits=10, decimal_places=2, default=None)
+    issue_qty_kg = models.DecimalField(max_digits=10, decimal_places=2, default=None) 
 
     def __str__(self):
         return f"{self.batch_id} - {self.component} - {self.hold_material_qty_kg}"

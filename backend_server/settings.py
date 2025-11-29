@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
+# settings.py
+from dotenv import load_dotenv
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -46,7 +50,7 @@ INSTALLED_APPS = [
     'core',
     'raw_material',
     'simple_history',
-    'forging','heat_treatment','pre_mc','machining','marking','visual','fi','dispatch','ims_documents','packing_area_inventory'
+    'forging','heat_treatment','pre_mc','machining','marking','visual','fi','dispatch','ims_documents','packing_area_inventory',"storages",
 ]
 
 MIDDLEWARE = [
@@ -84,12 +88,27 @@ WSGI_APPLICATION = 'backend_server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "django_db",  # OR your database name (you can check in RDS)
+        "USER": "admin",
+        "PASSWORD": "ENGeng#123",
+        "HOST": "database-1.c9y040qc2pq9.ap-south-1.rds.amazonaws.com",
+        "PORT": "3306",
+        "OPTIONS": {
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
+
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
 
 
@@ -154,5 +173,29 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
 }
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR.parent / "media"
+
+
+# print("KEY:", os.getenv("AWS_ACCESS_KEY_ID"))
+# print("SECRET:", os.getenv("AWS_SECRET_ACCESS_KEY"))
+# AWS S3 Credentials
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = "demo-software-backend-media-2025"
+AWS_S3_REGION_NAME = "ap-south-1"
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+
+# Storage settings
+AWS_DEFAULT_ACL = None
+AWS_S3_FILE_OVERWRITE = False
+AWS_S3_VERIFY = True
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/"
